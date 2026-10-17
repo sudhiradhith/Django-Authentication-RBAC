@@ -1,0 +1,67 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Dashboard | Lab 3B{% endblock %}
+{% block card_width %}700px{% endblock %}
+
+{% block content %}
+<h1>User Dashboard (Protected Page)</h1>
+<p class="subtitle">Task 1: Accessible Only to Authenticated Users (via <code>@login_required</code>)</p>
+
+{# Flash Messages #}
+{% for message in messages %}
+  <div class="msg {% if message.tags == 'error' %}msg-error{% elif message.tags == 'info' %}msg-info{% else %}msg-success{% endif %}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+<div class="dashboard-grid">
+  <div class="stat-card">
+    <div class="stat-title">Logged In As</div>
+    <div class="stat-val">{{ username }}</div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">Active Role</div>
+    <div class="stat-val">
+      <span class="role-badge {% if user_role == 'Student' %}role-student{% elif user_role == 'Teacher' %}role-teacher{% elif user_role == 'Admin' %}role-admin{% else %}role-general{% endif %}">
+        {{ user_role }}
+      </span>
+    </div>
+  </div>
+  <div class="stat-card">
+    <div class="stat-title">Account Email</div>
+    <div class="stat-val" style="font-size: 14px; margin-top: 8px;">{{ email|default:"Not Provided" }}</div>
+  </div>
+</div>
+
+<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 22px;">
+  <h3 style="font-size: 15px; color: #1e3a8a; margin-bottom: 12px;">🛡️ Role-Based Access Control (RBAC) Navigation:</h3>
+  <p style="font-size: 13px; color: #475569; margin-bottom: 16px;">
+    Specific dashboards are protected by the <code>@role_required</code> decorator. Test your access privileges by clicking below:
+  </p>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 14px;">
+    <div style="border: 1px solid #cbd5e1; border-radius: 10px; padding: 16px; background: #ffffff;">
+      <h4 style="font-size: 14px; color: #1e40af; margin-bottom: 6px;">🎓 Student Portal</h4>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">
+        Requires <strong>Student</strong> role. View enrolled courses, submission deadlines, and academic grades.
+      </p>
+      <a class="btn" style="padding: 8px 12px; font-size: 13px;" href="{% url 'student_dashboard' %}">Visit Student Portal &rarr;</a>
+    </div>
+
+    <div style="border: 1px solid #cbd5e1; border-radius: 10px; padding: 16px; background: #ffffff;">
+      <h4 style="font-size: 14px; color: #92400e; margin-bottom: 6px;">👨‍🏫 Teacher Portal</h4>
+      <p style="font-size: 12px; color: #64748b; margin-bottom: 12px;">
+        Requires <strong>Teacher</strong> role. Manage course rosters, review assignments, and post grades.
+      </p>
+      <a class="btn" style="padding: 8px 12px; font-size: 13px; background: #b45309;" href="{% url 'teacher_dashboard' %}">Visit Teacher Portal &rarr;</a>
+    </div>
+  </div>
+</div>
+
+<div style="display: flex; gap: 10px;">
+  <a class="btn btn-secondary" style="flex: 1;" href="{% url 'logout' %}">🚪 Log Out</a>
+  {% if is_superuser %}
+    <a class="btn" style="flex: 1; background: #0f172a;" href="/admin/" target="_blank">⚙️ Django Admin Site</a>
+  {% endif %}
+</div>
+{% endblock %}

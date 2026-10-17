@@ -1,0 +1,74 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Teacher Portal | Lab 3B{% endblock %}
+{% block card_width %}750px{% endblock %}
+
+{% block content %}
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+  <h1 style="margin: 0; text-align: left;">👨‍🏫 Teacher / Instructor Portal</h1>
+  <span class="role-badge role-teacher" style="font-size: 12px; padding: 4px 10px;">Access Granted: Teacher Role</span>
+</div>
+<p class="subtitle" style="text-align: left;">Task 3: Protected view restricted to the 'Teacher' group via <code>@role_required(['Teacher'])</code></p>
+
+{# Flash Messages #}
+{% for message in messages %}
+  <div class="msg {% if message.tags == 'error' %}msg-error{% elif message.tags == 'info' %}msg-info{% else %}msg-success{% endif %}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+<div style="margin-bottom: 24px;">
+  <h3 style="font-size: 15px; color: #0f172a; margin-bottom: 10px;">📋 Student Roster &amp; Role Assignments:</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Username</th>
+        <th>Registered Email</th>
+        <th>Assigned Role</th>
+        <th>Account Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for s in students %}
+        <tr>
+          <td><strong>{{ s.username }}</strong></td>
+          <td>{{ s.email|default:"No email registered" }}</td>
+          <td><span class="role-badge role-student">Student</span></td>
+          <td><span style="color: #059669; font-weight: 600;">Active</span></td>
+        </tr>
+      {% empty %}
+        <tr>
+          <td colspan="4" style="text-align: center; color: #64748b;">No students registered yet.</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+  <h3 style="font-size: 14px; color: #92400e; margin-bottom: 10px;">📝 Recent Assignment Submissions:</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Student</th>
+        <th>Assignment</th>
+        <th>Grading Status</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for sub in submissions %}
+        <tr>
+          <td>{{ sub.student }}</td>
+          <td>{{ sub.assignment }}</td>
+          <td><span style="font-weight: 600; color: #1e3a8a;">{{ sub.status }}</span></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div style="display: flex; gap: 10px;">
+  <a class="btn" style="flex: 1;" href="{% url 'dashboard' %}">&larr; Back to General Dashboard</a>
+  <a class="btn btn-secondary" style="flex: 1;" href="{% url 'student_dashboard' %}">View Student Portal &rarr;</a>
+</div>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Student Portal | Lab 3B{% endblock %}
+{% block card_width %}750px{% endblock %}
+
+{% block content %}
+<div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px;">
+  <h1 style="margin: 0; text-align: left;">🎓 Student Portal</h1>
+  <span class="role-badge role-student" style="font-size: 12px; padding: 4px 10px;">Access Granted: Student Role</span>
+</div>
+<p class="subtitle" style="text-align: left;">Task 3: Protected view restricted to the 'Student' group via <code>@role_required(['Student'])</code></p>
+
+{# Flash Messages #}
+{% for message in messages %}
+  <div class="msg {% if message.tags == 'error' %}msg-error{% elif message.tags == 'info' %}msg-info{% else %}msg-success{% endif %}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+<div style="margin-bottom: 24px;">
+  <h3 style="font-size: 15px; color: #0f172a; margin-bottom: 10px;">📚 Enrolled Courses &amp; Current Academic Grades:</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Course Code</th>
+        <th>Course Title</th>
+        <th>Completion</th>
+        <th>Current Grade</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for course in courses %}
+        <tr>
+          <td><strong>{{ course.code }}</strong></td>
+          <td>{{ course.title }}</td>
+          <td>
+            <div style="background: #e2e8f0; border-radius: 6px; overflow: hidden; height: 10px; width: 100px;">
+              <div style="background: #3b82f6; height: 100%; width: {{ course.progress }};"></div>
+            </div>
+            <span style="font-size: 11px; color: #64748b;">{{ course.progress }}</span>
+          </td>
+          <td><span style="background: #ecfdf5; color: #065f46; padding: 2px 8px; border-radius: 4px; font-weight: 700;">{{ course.grade }}</span></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+
+<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 18px; margin-bottom: 22px;">
+  <h3 style="font-size: 14px; color: #1e3a8a; margin-bottom: 10px;">📅 Upcoming Deadlines &amp; Lab Submissions:</h3>
+  <ul style="padding-left: 20px; font-size: 13px; color: #475569; line-height: 1.8;">
+    {% for task in tasks %}
+      <li>
+        <strong>{{ task.title }}</strong> &mdash; Due: <span style="color: #b91c1c; font-weight: 600;">{{ task.due }}</span>
+        <span style="background: #fef3c7; color: #92400e; padding: 1px 6px; border-radius: 4px; font-size: 11px; margin-left: 6px;">{{ task.status }}</span>
+      </li>
+    {% endfor %}
+  </ul>
+</div>
+
+<div style="display: flex; gap: 10px;">
+  <a class="btn" style="flex: 1;" href="{% url 'dashboard' %}">&larr; Back to General Dashboard</a>
+  <a class="btn btn-secondary" style="flex: 1;" href="{% url 'teacher_dashboard' %}">Test Teacher Access &rarr;</a>
+</div>
+{% endblock %}

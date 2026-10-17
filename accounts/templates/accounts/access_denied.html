@@ -1,0 +1,46 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}403 Forbidden | Access Denied{% endblock %}
+{% block card_width %}600px{% endblock %}
+
+{% block content %}
+<div style="text-align: center; margin-bottom: 20px;">
+  <div style="display: inline-block; width: 68px; height: 68px; line-height: 68px; border-radius: 50%; background: #fee2e2; color: #dc2626; font-size: 32px; font-weight: 700; margin-bottom: 12px;">
+    &#128683;
+  </div>
+  <h1 style="color: #991b1b; font-size: 24px; margin-bottom: 6px;">403 - Access Denied</h1>
+  <p class="subtitle">Task 3: Role-Based Access Control (RBAC) Enforcement</p>
+</div>
+
+<div style="background: #fef2f2; border: 1px solid #fecaca; border-radius: 12px; padding: 20px; margin-bottom: 22px;">
+  <h3 style="font-size: 14px; color: #991b1b; margin-bottom: 10px;">⚠️ Permission Warning:</h3>
+  <p style="font-size: 13px; color: #7f1d1d; line-height: 1.6; margin-bottom: 12px;">
+    You do not possess the required group permissions to access the requested resource:
+  </p>
+
+  <ul style="padding-left: 20px; font-size: 13px; color: #991b1b; line-height: 1.8;">
+    <li><strong>Attempted URL:</strong> <code>{{ attempted_page|default:"Restricted Page" }}</code></li>
+    <li><strong>Your Current Role(s):</strong>
+      {% for r in user_roles %}
+        <span class="role-badge role-student">{{ r }}</span>
+      {% empty %}
+        <span class="role-badge role-general">No Role Assigned</span>
+      {% endfor %}
+    </li>
+    <li><strong>Required Role(s):</strong>
+      {% for req in required_roles %}
+        <span class="role-badge role-teacher">{{ req }}</span>
+      {% endfor %}
+    </li>
+  </ul>
+</div>
+
+<div style="display: flex; gap: 10px;">
+  <a class="btn" style="flex: 1;" href="{% url 'dashboard' %}">&larr; Return to Dashboard</a>
+  <a class="btn btn-secondary" style="flex: 1;" href="{% url 'logout' %}">Log Out / Switch Account</a>
+</div>
+
+<div class="footer-links">
+  Need help? Contact the course administrator at <a href="mailto:admin@university.edu">admin@university.edu</a>
+</div>
+{% endblock %}

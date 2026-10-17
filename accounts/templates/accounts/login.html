@@ -1,0 +1,60 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}User Login | Lab 3B{% endblock %}
+{% block card_width %}500px{% endblock %}
+
+{% block content %}
+<h1>User Login</h1>
+<p class="subtitle">Task 1: Secure Authentication with Django Session Management</p>
+
+{# Flash Messages #}
+{% for message in messages %}
+  <div class="msg {% if message.tags == 'error' %}msg-error{% elif message.tags == 'info' %}msg-info{% else %}msg-success{% endif %}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+{% if form.non_field_errors %}
+  <div class="msg msg-error">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+  {% if next %}
+    <input type="hidden" name="next" value="{{ next }}">
+  {% endif %}
+
+  {% for field in form %}
+    <p>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% if field.errors %}
+        <div class="errorlist">
+          {% for error in field.errors %}
+            <div>&bull; {{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {{ field }}
+    </p>
+  {% endfor %}
+
+  <div style="display: flex; justify-content: flex-end; margin-bottom: 16px;">
+    <a href="{% url 'password_reset' %}" style="font-size: 12.5px; color: #2563eb; text-decoration: none;">Forgot your password?</a>
+  </div>
+
+  <button type="submit" class="btn">Log In</button>
+</form>
+
+<div style="background: #f8fafc; border: 1px dashed #cbd5e1; border-radius: 8px; padding: 12px; margin-top: 20px; font-size: 12px; color: #475569;">
+  <strong>💡 Demo Accounts:</strong><br>
+  &bull; Student: <code>alice_student</code> / <code>Student@123</code><br>
+  &bull; Teacher: <code>prof_smith</code> / <code>Teacher@123</code><br>
+  &bull; Admin: <code>admin</code> / <code>Admin@123</code>
+</div>
+
+<div class="footer-links">
+  Don't have an account? <a href="{% url 'register' %}">Sign up now</a> &bull; <a href="{% url 'home' %}">&larr; Back to Home</a>
+</div>
+{% endblock %}

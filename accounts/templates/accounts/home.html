@@ -1,0 +1,74 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}Welcome | Lab 3B Authentication & RBAC{% endblock %}
+{% block card_width %}680px{% endblock %}
+
+{% block content %}
+<h1>Django Authentication &amp; RBAC Portal</h1>
+<p class="subtitle">Full Stack Web Development (MDSO508-3) &bull; Lab 3B</p>
+
+{# Flash Messages #}
+{% for message in messages %}
+  <div class="msg {% if message.tags == 'error' %}msg-error{% elif message.tags == 'info' %}msg-info{% else %}msg-success{% endif %}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+<div style="background: #f8fafc; border: 1px solid #e2e8f0; border-radius: 12px; padding: 20px; margin-bottom: 22px;">
+  <h3 style="font-size: 15px; color: #1e3a8a; margin-bottom: 8px;">🎯 Lab Objectives &amp; Features Implemented:</h3>
+  <ul style="padding-left: 20px; font-size: 13px; line-height: 1.7; color: #475569;">
+    <li><strong>Task 1 (User Authentication):</strong> Custom Registration with Role selection, Login with authentication verification, Logout, and Protected <code>/dashboard/</code> via <code>@login_required</code>.</li>
+    <li><strong>Task 2 (Password Reset):</strong> Full 4-step token-based reset workflow using Django's built-in views and console email backend.</li>
+    <li><strong>Task 3 (Role-Based Access Control):</strong> Django <code>Group</code> based roles (<code>Student</code> &amp; <code>Teacher</code>), custom <code>@role_required</code> decorator, and restricted dashboards with a dedicated 403 Access Denied page.</li>
+    <li><strong>Task 4 (Testing &amp; Analysis):</strong> Automated tests, test matrix, and generated PDF report.</li>
+  </ul>
+</div>
+
+<div style="margin-bottom: 24px;">
+  <h3 style="font-size: 14px; font-weight: 700; color: #0f172a; margin-bottom: 10px;">🔑 Pre-Configured Test Credentials:</h3>
+  <table class="data-table">
+    <thead>
+      <tr>
+        <th>Role</th>
+        <th>Username</th>
+        <th>Password</th>
+        <th>Permitted Access</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td><span class="role-badge role-student">Student</span></td>
+        <td><code>alice_student</code></td>
+        <td><code>Student@123</code></td>
+        <td>Dashboard, Student Portal</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-teacher">Teacher</span></td>
+        <td><code>prof_smith</code></td>
+        <td><code>Teacher@123</code></td>
+        <td>Dashboard, Teacher Portal</td>
+      </tr>
+      <tr>
+        <td><span class="role-badge role-admin">Admin</span></td>
+        <td><code>admin</code></td>
+        <td><code>Admin@123</code></td>
+        <td>Full Access + Django Admin</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<div style="display: flex; gap: 10px; flex-wrap: wrap;">
+  {% if user.is_authenticated %}
+    <a class="btn" style="flex: 1;" href="{% url 'dashboard' %}">Open Protected Dashboard &rarr;</a>
+    <a class="btn btn-secondary" style="flex: 1;" href="{% url 'logout' %}">Logout</a>
+  {% else %}
+    <a class="btn" style="flex: 1;" href="{% url 'login' %}">🔑 User Login</a>
+    <a class="btn btn-secondary" style="flex: 1;" href="{% url 'register' %}">📝 Register New User</a>
+  {% endif %}
+</div>
+
+<div class="footer-links">
+  Need to test password reset? <a href="{% url 'password_reset' %}">Request Password Reset Token</a> &bull; <a href="/admin/" target="_blank">Django Admin</a>
+</div>
+{% endblock %}

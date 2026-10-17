@@ -1,0 +1,49 @@
+{% extends 'accounts/base.html' %}
+
+{% block title %}User Registration | Lab 3B{% endblock %}
+{% block card_width %}540px{% endblock %}
+
+{% block content %}
+<h1>Create an Account</h1>
+<p class="subtitle">Task 1: Registration with Built-in User Model &amp; Role Assignment</p>
+
+{# Flash Messages #}
+{% for message in messages %}
+  <div class="msg {% if message.tags == 'error' %}msg-error{% elif message.tags == 'info' %}msg-info{% else %}msg-success{% endif %}">
+    {{ message }}
+  </div>
+{% endfor %}
+
+{% if form.non_field_errors %}
+  <div class="msg msg-error">
+    {{ form.non_field_errors }}
+  </div>
+{% endif %}
+
+<form method="post" novalidate>
+  {% csrf_token %}
+
+  {% for field in form %}
+    <p>
+      <label for="{{ field.id_for_label }}">{{ field.label }}</label>
+      {% if field.errors %}
+        <div class="errorlist">
+          {% for error in field.errors %}
+            <div>&bull; {{ error }}</div>
+          {% endfor %}
+        </div>
+      {% endif %}
+      {{ field }}
+      {% if field.help_text %}
+        <span class="helptext">{{ field.help_text|safe }}</span>
+      {% endif %}
+    </p>
+  {% endfor %}
+
+  <button type="submit" class="btn" style="margin-top: 10px;">Register &amp; Assign Role</button>
+</form>
+
+<div class="footer-links">
+  Already have an account? <a href="{% url 'login' %}">Log in here</a> &bull; <a href="{% url 'home' %}">&larr; Back to Home</a>
+</div>
+{% endblock %}

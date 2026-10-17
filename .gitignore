@@ -1,0 +1,19 @@
+# Python bytecode
+__pycache__/
+*.py[cod]
+*$py.class
+
+# Environment
+venv/
+env/
+ENV/
+
+# Temporary screenshots html dumps
+screenshots/html/
+
+# Archives
+*.zip
+
+# OS files
+.DS_Store
+Thumbs.db
